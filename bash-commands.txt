@@ -1,0 +1,35 @@
+﻿####Elimia capillaris STACKS commands####
+
+#For Parameter Testing
+for i in {1..3}
+do
+mkdir Ecap_m3M$i\n$i
+denovo_map.pl --samples ./data4stacks/ -o Ecap_m3M$i\n$i -m 3 -M $i -n $i -T 10 --popmap E_capillaris_stacks-popmap.txt -X "populations:-R 0.80"
+done
+
+#For Final Assembly
+denovo_map.pl --samples ./data4stacks/ -o Ecap_m3M2n2 -m 3 -M 2 -n 2 -T 10 --popmap E_capillaris_stacks-popmap.txt -X "populations:-R 0.80"
+populations -P Ecap_m3M2n2/ -O Ecren_m3M2n2_mac2_R80_multo -M E_capillaris_stacks-popmap.txt -t 10 -R .8 --max-obs-het 0.5 --min-mac 2 --fstats --vcf --genepop --structure --radpainter --plink
+populations -P Ecap_m3M2n2/ -O Ecap_m3M2n2_mac2_R80_single -M E_capillaris_stacks-popmap.txt -t 10 -R .8 --max-obs-het 0.5 --min-mac 2 --fstats --vcf --genepop --structure --radpainter --plink --write-single-snp
+
+
+####Elimia crenatella STACKS commands####
+
+#For Parameter Testing
+for i in {1..3}
+do
+mkdir Ecren_m3M$i\n$i
+denovo_map.pl --samples ./data4stacks/ -o Ecren_m3M$i\n$i -m 3 -M $i -n $i -T 10 --popmap E_crenatella_popmap-stacks.txt -X "populations:-R 0.80"
+done
+
+#For Final Assembly
+denovo_map.pl --samples ./data4stacks/ -o Ecren_m3M2n2 -m 3 -M 2 -n 2 -T 10 --popmap E_crenatella_popmap-stacks.txt -X "populations:-R 0.80"
+populations -P Ecren_m3M2n2 -O Ecren_m3M2n2_mac2_R80_multi -M E_crenatella_popmap-stacks.txt -t 10 -R .8 --max-obs-het 0.5 --min-mac 2 --fstats --vcf --genepop --structure --radpainter --plink
+populations -P Ecren_m3M2n2 -O Ecren_m3M2n2_mac2_R80_single -M E_crenatella_popmap-stacks.txt -t 10 -R .8 --max-obs-het 0.5 --min-mac 2 --fstats --vcf --genepop --structure --radpainter --plink --write-single-snp
+
+
+###FineRADstructure-commands
+RADpainter paint populations.haps.radpainter
+finestructure -x 1000000 -y 1000000 -z 1000 populations.haps_chunks.out populations.haps_chunks.mcmc.xml
+finestructure -m T -x 1000000 populations.haps_chunks.out populations.haps_chunks.mcmc.xml populations.haps_chunks.mcmcTree.xml
+
